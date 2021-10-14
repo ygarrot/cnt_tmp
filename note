@@ -1,0 +1,23 @@
+Todo:
+	associer chaque etat comme pour dslr
+
+Question itk:
+	definir suractivite
+
+
+
+outliers: valeurs aberrantes
+scatter plot= nuage de point
+gamut= gamme
+
+
+
+role of graphics: https://www.itl.nist.gov/div898/handbook/eda/section1/eda15.htm
+
+General problem Categories: https://www.itl.nist.gov/div898/handbook/eda/section1/eda17.htm
+(conseil pour le choix des graphes)
+
+Inasmuch = Dans la mesure
+
+lag plot = scatter plot + lag (y + n) typiquement n + 1
+
