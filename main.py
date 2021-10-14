@@ -68,29 +68,6 @@ def floor_events(*events):
             event.index = event.index.floor('5T').floor('Min') 
         return events
 
-def main():
-    csv = pd.read_csv(metadata_csv)
-    plot_one(csv)
-    # plot_main(csv)
-
-# def plot_main(csv):
-#     dic = {}
-#     for index, row in csv.sort_index().iterrows():
-#         event = row['event_id'] 
-#         normalized_events = pd.read_parquet(normalized + event + '.parquet').fillna(False)
-#         # raw_events = pd.read_parquet(ax + event + '.parquet')[['EAn', 'EAg', 'Egx']].interpolate()
-#         raw_events = pd.read_parquet(ax + event + '.parquet').interpolate()
-#         normalized_events = normalized_events.loc['2019-02-06':'2019-02-07']
-#         raw_events = raw_events.loc['2019-02-06':'2019-02-07']
-#         # raw_events = rename_raw_data(raw_events)
-
-#         raw_events, normalized_events = floor_events(raw_events, normalized_events)
-#         print(raw_events, normalized_events)
-#         plot_all(raw_events, normalized_events)
-#         dic.setdefault(row['cow_id'], []).append(pd.concat([normalized_events, raw_events], axis=1))
-#         # pd.plotting.autocorrelation_plot(normalized_events['Rumination'])
-#     plt.show()
-
 
 #     dic = {}
 #     for index, row in csv.sort_index().iterrows():
@@ -107,6 +84,10 @@ def plot_one(csv):
 
     plot_all(normalized_events, raw_events)
     state_pair_plot(normalized_events, raw_events)
+
+def main():
+    csv = pd.read_csv(metadata_csv)
+    plot_one(csv)
 
 if __name__ == '__main__':
     main()
