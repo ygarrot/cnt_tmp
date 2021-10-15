@@ -1,8 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-# import statsmodels.api as sm
 from statsmodels.tsa.seasonal import STL
+import statsmodels.api as sm
+# import statsmodels.api as sm
 # import seaborn; seaborn.set()
 
 # raw = ['EAg', 'EAn', 'Egx', 'Chgx', 'ChAg', 'ChAn', 'EtAG', 'EtGx', 'P0An']
@@ -38,41 +39,42 @@ def rename_raw_data(raw_data):
             })
 
 def state_pair_plot(normalized_events, raw_events):
-    # state_dic = pd.merge(normalized_events, raw_events, how='outer', left_index=True, right_index=True)
     state_dic = pd.concat([normalized_events, raw_events], axis=1)
+
     # pd.plotting.autocorrelation_plot(normalized_events['Rumination'])
+    plt.show()
+
     state_dic = state_dic.apply(set_state, axis=1)
     state_dic = state_dic.drop(columns=['Rumination', 'Ingestion_at_trough',
                                         'Ingestion_at_pasture', 'OverActivity',
                                         'Rest', 'Up', 'OtherActivity'])
     state_dic = state_dic.interpolate().dropna()
-    sns.pairplot(state_dic, hue='State')
+    sns.pairplot(state_dic, hue='State',
+                 corner=True,
+                 diag_kws=dict(fill=False),)
+    # g.map_lower(sns.kdeplot, levels=4, color=".2")
 
-import statsmodels.api as sm
 def plot_all(normalized_events, raw_events):
-        # print(normalized_events.shape)
-        # normalized_events_len = normalized_events.shape[1]
+        normalized_events_len = normalized_events.shape[1]
         # fig, axes = plt.subplots(normalized_events_len + raw_events.shape[1], 1, sharex=True)
         # normalized_events.plot(ax=axes[:normalized_events_len], subplots=True)
         # raw_events.plot(ax=axes[normalized_events_len:], subplots=True)
 
-        # raw_events.hist()
+        raw_events.hist()
         # normalized_events.hist()
 
         ### Plot date###
         # plt.plot_date(normalized_events.index,
         #               raw_events['EAn'].astype('int'), 
         #               linestyle='--')
+
         ## seasonal decomposition
-        # print(raw_events['EAn'])
-        # stl = STL(raw_events['EAn'], seasonal=13)
-        # res = stl.fit()
-        # fig = res.plot()
-        sm.tsa.seasonal_decompose(raw_events['EAn'], freq=12).plot()
-        plt.show()
+        sm.tsa.seasonal_decompose(raw_events['EAn'], freq=12*6).plot()
+
         ## LAG PLOT ##
         # pd.plotting.lag_plot(raw_events['ChAg'], lag=1)
 
+        plt.show()
 
 def floor_events(*events):
         for event in events:
@@ -84,7 +86,7 @@ def reduce_to_one_day(normalized_events, raw_events):
     day_after = first_day + pd.DateOffset(1)
 
     normalized_events = normalized_events.loc[first_day : day_after]
-    raw_events = raw_events.loc[first_day : day_after]
+    raw_events = raw_events.loc[first_day: day_after]
     return normalized_events, raw_events
 
 def plot_one(row):
@@ -97,10 +99,10 @@ def plot_one(row):
 
     #move this after reducing to one day (fix the na problem) 
     state_dic = pd.concat([normalized_events, raw_events], axis=1)
-    normalized_events = state_dic[normalized_events.columns]
-    raw_events = state_dic[raw_events.columns]
+    normalized_events = state_dic[normalized_events.columns].dropna()
+    raw_events = state_dic[raw_events.columns].dropna()
 
-    normalized_events, raw_events = reduce_to_one_day(normalized_events, raw_events)
+    # normalized_events, raw_events = reduce_to_one_day(normalized_events, raw_events)
 
     # raw_events = rename_raw_data(raw_events)
     raw_events, normalized_events = floor_events(raw_events, normalized_events)
@@ -110,9 +112,11 @@ def plot_one(row):
 
 def main():
     csv = pd.read_csv(metadata_csv)
-    # plot_one(csv.iloc[0].sort_index())
-    for index, row in csv.sort_index().iterrows():
-        plot_one(row)
+    fig = plt.gcf()
+    fig.set_size_inches(18.5, 10.5)
+    plot_one(csv.iloc[0].sort_index())
+    # for index, row in csv.sort_index().iterrows():
+    #     plot_one(row)
 
 if __name__ == '__main__':
     main()
