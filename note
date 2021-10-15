@@ -1,17 +1,10 @@
-Todo:
-	associer chaque etat comme pour dslr
-
-Question itk:
-	definir suractivite
-
-
-
 outliers: valeurs aberrantes
 scatter plot= nuage de point
-gamut= gamme
+gamut=gamme
 
 
 
+## www.itl.nist.gov
 role of graphics: https://www.itl.nist.gov/div898/handbook/eda/section1/eda15.htm
 
 General problem Categories: https://www.itl.nist.gov/div898/handbook/eda/section1/eda17.htm
@@ -21,3 +14,19 @@ Inasmuch = Dans la mesure
 
 lag plot = scatter plot + lag (y + n) typiquement n + 1
 
+seasonal decomposition statsmodels
+
+## matrix comparison
+	print(data_train.info())
+	print(data_train.isna().sum())
+
+
+## Ajouter un offset a un timestamp
+	pd.DatetimeIndex(df.date) + pd.DateOffset(1)
+	d.DatetimeIndex(df.date) + pd.offsets.Hour(1)
+
+## merge with timestamp index
+	state_dic = pd.merge(normalized_events, raw_events, how='outer', left_index=True, right_index=True)
+    state_dic = pd.concat([normalized_events, raw_events], axis=1)
+
+'foreach like' `state_dic.apply(set_state, axis=1)`

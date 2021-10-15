@@ -1,6 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+# import statsmodels.api as sm
+from statsmodels.tsa.seasonal import STL
 # import seaborn; seaborn.set()
 
 # raw = ['EAg', 'EAn', 'Egx', 'Chgx', 'ChAg', 'ChAn', 'EtAG', 'EtGx', 'P0An']
@@ -10,7 +12,8 @@ metadata_csv = root + 'metadata.csv'
 normalized = root + 'normalized/'
 ax = root + 'ax_raw/'
 
-state_compare = ['Rumination', 'Ingestion_at_trough', 'Ingestion_at_pasture', 'OverActivity', 'Rest']
+state_compare = ['Rumination', 'Ingestion_at_trough',
+                 'Ingestion_at_pasture', 'OverActivity', 'Rest']
 # state_compare = ['Up']
 
 def set_state(df):
@@ -35,6 +38,7 @@ def rename_raw_data(raw_data):
             })
 
 def state_pair_plot(normalized_events, raw_events):
+    # state_dic = pd.merge(normalized_events, raw_events, how='outer', left_index=True, right_index=True)
     state_dic = pd.concat([normalized_events, raw_events], axis=1)
     # pd.plotting.autocorrelation_plot(normalized_events['Rumination'])
     state_dic = state_dic.apply(set_state, axis=1)
@@ -43,37 +47,46 @@ def state_pair_plot(normalized_events, raw_events):
                                         'Rest', 'Up', 'OtherActivity'])
     state_dic = state_dic.interpolate().dropna()
     sns.pairplot(state_dic, hue='State')
-    plt.show()
 
-
+import statsmodels.api as sm
 def plot_all(normalized_events, raw_events):
-        print(normalized_events.shape)
-        normalized_events_len = normalized_events.shape[1]
+        # print(normalized_events.shape)
+        # normalized_events_len = normalized_events.shape[1]
         # fig, axes = plt.subplots(normalized_events_len + raw_events.shape[1], 1, sharex=True)
         # normalized_events.plot(ax=axes[:normalized_events_len], subplots=True)
         # raw_events.plot(ax=axes[normalized_events_len:], subplots=True)
 
         # raw_events.hist()
         # normalized_events.hist()
-        # sns.pairplot(raw_events, hue='State')
-        print(normalized_events['Rumination'])
 
-        plt.plot_date(normalized_events.index,
-                      normalized_events['Rumination'].astype('int'), 
-                      linestyle='--')
-
+        ### Plot date###
+        # plt.plot_date(normalized_events.index,
+        #               raw_events['EAn'].astype('int'), 
+        #               linestyle='--')
+        ## seasonal decomposition
+        # print(raw_events['EAn'])
+        # stl = STL(raw_events['EAn'], seasonal=13)
+        # res = stl.fit()
+        # fig = res.plot()
+        sm.tsa.seasonal_decompose(raw_events['EAn'], freq=12).plot()
+        plt.show()
         ## LAG PLOT ##
         # pd.plotting.lag_plot(raw_events['ChAg'], lag=1)
 
-        plt.show()
 
 def floor_events(*events):
         for event in events:
             event.index = event.index.floor('5T').floor('Min') 
         return events
 
-#     dic = {}
-#     for index, row in csv.sort_index().iterrows():
+def reduce_to_one_day(normalized_events, raw_events):
+    first_day = normalized_events.index[0]
+    day_after = first_day + pd.DateOffset(1)
+
+    normalized_events = normalized_events.loc[first_day : day_after]
+    raw_events = raw_events.loc[first_day : day_after]
+    return normalized_events, raw_events
+
 def plot_one(row):
     event = row['event_id'] 
     normalized_events = pd.read_parquet(normalized + event + '.parquet').fillna(False)
@@ -81,13 +94,18 @@ def plot_one(row):
     raw_events = pd.read_parquet(ax + event + '.parquet').interpolate()
     if (normalized_events.shape[0] < 1):
         return
-    print(normalized_events.index[0])
-    normalized_events = normalized_events.loc['2019-02-06':'2019-02-07']
-    raw_events = raw_events.loc['2019-02-06':'2019-02-07']
+
+    #move this after reducing to one day (fix the na problem) 
+    state_dic = pd.concat([normalized_events, raw_events], axis=1)
+    normalized_events = state_dic[normalized_events.columns]
+    raw_events = state_dic[raw_events.columns]
+
+    normalized_events, raw_events = reduce_to_one_day(normalized_events, raw_events)
+
     # raw_events = rename_raw_data(raw_events)
     raw_events, normalized_events = floor_events(raw_events, normalized_events)
 
-    # plot_all(normalized_events, raw_events)
+    plot_all(normalized_events, raw_events)
     # state_pair_plot(normalized_events, raw_events)
 
 def main():
