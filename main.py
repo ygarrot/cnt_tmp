@@ -6,6 +6,8 @@ import statsmodels.api as sm
 # import statsmodels.api as sm
 # import seaborn; seaborn.set()
 
+plt.rcParams["figure.figsize"] = (20,9)
+
 # raw = ['EAg', 'EAn', 'Egx', 'Chgx', 'ChAg', 'ChAn', 'EtAG', 'EtGx', 'P0An']
 # normalized = ['Rumination', 'Ingestion', 'OverActivity', 'Other Activity', 'Rest']
 root = 'hectare_data/heatlive_allaitant_ms/'
@@ -38,11 +40,21 @@ def rename_raw_data(raw_data):
                 'Etgx': ' écart-type de l’accélération sur axe x sur les 5 min', \
             })
 
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
 def state_pair_plot(normalized_events, raw_events):
     state_dic = pd.concat([normalized_events, raw_events], axis=1)
+    print(state_dic.shape)
+    print(state_dic.dropna().shape())
 
-    # pd.plotting.autocorrelation_plot(normalized_events['Rumination'])
-    plt.show()
+    normalized_events = normalized_events.drop(columns=['Up'])
+    X_train, X_test, y_train, y_test = train_test_split(raw_events, normalized_events, test_size=0.4)
+
+    lr = LogisticRegression().fit(X_train, y_train)
+    print("score : ", lr.score(X_test, y_test))
+
 
     state_dic = state_dic.apply(set_state, axis=1)
     state_dic = state_dic.drop(columns=['Rumination', 'Ingestion_at_trough',
@@ -53,6 +65,8 @@ def state_pair_plot(normalized_events, raw_events):
                  corner=True,
                  diag_kws=dict(fill=False),)
     # g.map_lower(sns.kdeplot, levels=4, color=".2")
+    plt.show()
+
 
 def plot_all(normalized_events, raw_events):
         normalized_events_len = normalized_events.shape[1]
@@ -60,7 +74,7 @@ def plot_all(normalized_events, raw_events):
         # normalized_events.plot(ax=axes[:normalized_events_len], subplots=True)
         # raw_events.plot(ax=axes[normalized_events_len:], subplots=True)
 
-        raw_events.hist()
+        # raw_events.hist()
         # normalized_events.hist()
 
         ### Plot date###
@@ -69,10 +83,15 @@ def plot_all(normalized_events, raw_events):
         #               linestyle='--')
 
         ## seasonal decomposition
-        sm.tsa.seasonal_decompose(raw_events['EAn'], freq=12*6).plot()
+        sm.tsa.seasonal_decompose(raw_events['EAn'], period=12*6).plot()
 
         ## LAG PLOT ##
         # pd.plotting.lag_plot(raw_events['ChAg'], lag=1)
+
+        ## Auto Correlation plot ##
+        ## TODO : resample, since autocorrelation is used to find repeating 
+        #         cycle, its better to use day/week/season
+        # pd.plotting.autocorrelation_plot(raw_events['ChAg'])
 
         plt.show()
 
@@ -98,23 +117,21 @@ def plot_one(row):
         return
 
     #move this after reducing to one day (fix the na problem) 
-    state_dic = pd.concat([normalized_events, raw_events], axis=1)
-    normalized_events = state_dic[normalized_events.columns].dropna()
-    raw_events = state_dic[raw_events.columns].dropna()
+    # state_dic = pd.concat([normalized_events, raw_events], axis=1)
+    # normalized_events = state_dic[normalized_events.columns].dropna()
+    # raw_events = state_dic[raw_events.columns].dropna()
 
     # normalized_events, raw_events = reduce_to_one_day(normalized_events, raw_events)
 
     # raw_events = rename_raw_data(raw_events)
     raw_events, normalized_events = floor_events(raw_events, normalized_events)
 
-    plot_all(normalized_events, raw_events)
-    # state_pair_plot(normalized_events, raw_events)
+    # plot_all(normalized_events, raw_events)
+    state_pair_plot(normalized_events, raw_events)
 
 def main():
     csv = pd.read_csv(metadata_csv)
-    fig = plt.gcf()
-    fig.set_size_inches(18.5, 10.5)
-    plot_one(csv.iloc[0].sort_index())
+    plot_one(csv.iloc[1].sort_index())
     # for index, row in csv.sort_index().iterrows():
     #     plot_one(row)
 
