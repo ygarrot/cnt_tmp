@@ -1,3 +1,13 @@
+# Question itk
+
+Pour la prevision:
+y'a t-il moyen de savoir quand une vache se fait chevauchée
+Le cycle des femelles dure 21 jours, ce serait plus facile si on connaissait les cycles
+(plus de détection de chaleur donc plus de parquet)
+
+L'ovulation a lieu 10 a 12heures apres les chaleurs
+
+
 # GOAL:
 vêlage est imminent ou si l’animal présente un comportement de chaleurs
 
@@ -5,15 +15,45 @@ vêlage est imminent ou si l’animal présente un comportement de chaleurs
 
 organiser les données
 Tracer les saisons, resample, confusion matrix
-Essayer de faire une regression logistic avec les 5 colonnes a predire
-('Rumination', 'Ingestion', 'OverActivity', 'Other Activity', 'Rest'])
-Il faut au moins les données d'une vache sur une année
+Correlation matrix
+Facebook kats prophet
+statsmodels
+# TODO mardi
 
+test data un parquet vs un autre
+todo lundi
+
+Il faut au moins les données d'une vache sur une année
+TEST DE RACINE UNITAIRE (DICKEY-FULLER) ET DE STATIONARITÉ D'UNE SÉRIE CHRONOLOGIQUE
 
 
 outliers: valeurs aberrantes
 scatter plot= nuage de point
 gamut=gamme
+
+## Time series analysis python
+https://www.machinelearningplus.com/time-series/time-series-analysis-python/
+6. Additive and multiplicative time series
+Depending on the nature of the trend and seasonality, a time series can be modeled as an additive or multiplicative, wherein, each observation in the series can be expressed as either a sum or a product of the components:
+
+Additive time series:
+Value = Base Level + Trend + Seasonality + Error
+
+Multiplicative Time Series:
+Value = Base Level x Trend x Seasonality x Error
+8. Stationary and Non-Stationary Time Series
+Stationarity is a property of a time series. A stationary series is one where the values of the series is not a function of time.
+
+That is, the statistical properties of the series like mean, variance and autocorrelation are constant over time.
+/!\ Autocorrelation of the series is nothing but the correlation of the series with its previous values, more on this coming up.
+
+A stationary time series id devoid of seasonal effects as well.
+10. How to test for stationarity?
+
+13. How to deseasonalize a time series?
+
+20. Why and How to smoothen a time series?
+
 
 ## www.itl.nist.gov
 role of graphics: https://www.itl.nist.gov/div898/handbook/eda/section1/eda15.htm
@@ -42,6 +82,8 @@ d.DatetimeIndex(df.date) + pd.offsets.Hour(1)
 
 ## merge with timestamp index
 ```python
+merge = pd.merge_asof(csv.raw_events, csv.normalized_events,
+left_index=True, right_index = True, tolerance=pd.Timedelta("5T"))
 state_dic = pd.merge(normalized_events, raw_events, how='outer', left_index=True, right_index=True)
 state_dic = pd.concat([normalized_events, raw_events], axis=1)
 ```

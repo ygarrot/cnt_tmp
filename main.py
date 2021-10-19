@@ -18,6 +18,7 @@ ax = root + 'ax_raw/'
 state_compare = ['Rumination', 'Ingestion_at_trough',
                  'Ingestion_at_pasture', 'OverActivity', 'Rest']
 # state_compare = ['Up']
+# state_compare = ['Rumination']
 
 def set_state(df):
     for index, state in df[state_compare].iteritems():
@@ -42,19 +43,23 @@ def rename_raw_data(raw_data):
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import PolynomialFeatures
+poly = PolynomialFeatures(2)
+
+def predict(state_dic, raw_events, normalized_events):
+    state_dic = state_dic.apply(set_state, axis=1).dropna()
+    raw_events = state_dic[raw_events.columns]
+
+    X_train, X_test, y_train, y_test = train_test_split(raw_events, state_dic['State'], test_size=0.4)
+    X_train = poly.fit_transform(X_train)
+
+    lr = LogisticRegression(solver='sag', C=100000.0, max_iter=10000000).fit(X_train, y_train)
+    score =  round(lr.score(poly.transform(X_test), y_test) * 100, 1)
+    print("score: ", score)
+    # print("score : ", lr.score(X_test, y_test))
 
 def state_pair_plot(normalized_events, raw_events):
     state_dic = pd.concat([normalized_events, raw_events], axis=1)
-    print(state_dic.shape)
-    print(state_dic.dropna().shape())
-
-    normalized_events = normalized_events.drop(columns=['Up'])
-    X_train, X_test, y_train, y_test = train_test_split(raw_events, normalized_events, test_size=0.4)
-
-    lr = LogisticRegression().fit(X_train, y_train)
-    print("score : ", lr.score(X_test, y_test))
-
 
     state_dic = state_dic.apply(set_state, axis=1)
     state_dic = state_dic.drop(columns=['Rumination', 'Ingestion_at_trough',
@@ -68,7 +73,7 @@ def state_pair_plot(normalized_events, raw_events):
     plt.show()
 
 
-def plot_all(normalized_events, raw_events):
+def plot_all(raw_events, normalized_events):
         normalized_events_len = normalized_events.shape[1]
         # fig, axes = plt.subplots(normalized_events_len + raw_events.shape[1], 1, sharex=True)
         # normalized_events.plot(ax=axes[:normalized_events_len], subplots=True)
@@ -95,10 +100,6 @@ def plot_all(normalized_events, raw_events):
 
         plt.show()
 
-def floor_events(*events):
-        for event in events:
-            event.index = event.index.floor('5T').floor('Min') 
-        return events
 
 def reduce_to_one_day(normalized_events, raw_events):
     first_day = normalized_events.index[0]
@@ -108,30 +109,57 @@ def reduce_to_one_day(normalized_events, raw_events):
     raw_events = raw_events.loc[first_day: day_after]
     return normalized_events, raw_events
 
-def plot_one(row):
-    event = row['event_id'] 
-    normalized_events = pd.read_parquet(normalized + event + '.parquet').fillna(False)
-    # raw_events = pd.read_parquet(ax + event + '.parquet')[['EAn', 'EAg', 'Egx']].interpolate()
-    raw_events = pd.read_parquet(ax + event + '.parquet').interpolate()
+def plot_one(raw_events, normalized_events):
     if (normalized_events.shape[0] < 1):
         return
 
-    #move this after reducing to one day (fix the na problem) 
-    # state_dic = pd.concat([normalized_events, raw_events], axis=1)
-    # normalized_events = state_dic[normalized_events.columns].dropna()
-    # raw_events = state_dic[raw_events.columns].dropna()
+    #TODO: move this after reducing to one day (fix the na problem) 
+    state_dic = pd.concat([normalized_events, raw_events], axis=1)
+    normalized_events = state_dic[normalized_events.columns]
+    raw_events = state_dic[raw_events.columns]
 
-    # normalized_events, raw_events = reduce_to_one_day(normalized_events, raw_events)
+    normalized_events, raw_events = reduce_to_one_day(normalized_events, raw_events)
 
     # raw_events = rename_raw_data(raw_events)
-    raw_events, normalized_events = floor_events(raw_events, normalized_events)
+    plot_all(raw_events, normalized_events)
+    # state_pair_plot(normalized_events, raw_events)
 
-    # plot_all(normalized_events, raw_events)
-    state_pair_plot(normalized_events, raw_events)
+def floor_event(event): return event.index.floor('5T').floor('Min')
+
+class Csv_reader():
+    def get_data(self):
+        return [self.raw_events, self.normalized_events]
+
+    def __init__(self, csv_name):
+        self.set_data(csv_name)
+
+    def floor_events(self):
+        self.normalized_events.index = floor_event(self.normalized_events)
+        self.raw_events.index = floor_event(self.raw_events)
+
+    def set_data(self, csv_name):
+        csv = pd.read_csv(csv_name)
+        row = csv.iloc[1].sort_index()
+        event = row['event_id'] 
+        self.normalized_events = pd.read_parquet(normalized + event + '.parquet').fillna(False)
+        self.raw_events = pd.read_parquet(ax + event + '.parquet').interpolate()
+        self.floor_events()
+
+def save_df(df, fileName="text.txt"):
+    tfile = open(fileName, 'w+')
+    tfile.write(df.to_string())
+    tfile.close()
 
 def main():
-    csv = pd.read_csv(metadata_csv)
-    plot_one(csv.iloc[1].sort_index())
+    csv = Csv_reader(metadata_csv)
+    plot_one(csv.raw_events, csv.normalized_events)
+    merge = pd.merge_asof(csv.raw_events, csv.normalized_events,
+                        left_index=True, right_index = True, tolerance=pd.Timedelta("5T"))
+    concat = pd.concat([csv.normalized_events, csv.raw_events], axis=1)
+    merge = merge.dropna()
+    predict(merge, csv.raw_events, csv.normalized_events)
+    # print(merge)
+
     # for index, row in csv.sort_index().iterrows():
     #     plot_one(row)
 
