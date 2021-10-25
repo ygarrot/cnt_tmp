@@ -1,4 +1,4 @@
-EDA (Exploratory Data Analysis)
+# EDA (Exploratory Data Analysis)
 	souvent associe a Statistique utilisant un graphique
 
 	Techniques:
@@ -38,7 +38,7 @@ En ce sens, il y a une perte d'information due à ce processus de "filtrage".
 
 L'approche EDA, en revanche, utilise souvent (et montre) toutes les données disponibles. En ce sens, il n'y a pas de perte d'informations correspondante.
 
-##Hypotheses
+[[Hypotheses]]
 
 La "bonne nouvelle" de l'approche classique est que les tests basés sur des techniques classiques sont généralement très sensibles -
 c'est-à-dire que si un véritable changement d'emplacement, disons, s'est produit, de tels tests ont souvent le pouvoir de détecter un tel changement et de conclure qu'un tel changement est "statistiquement significatif".
