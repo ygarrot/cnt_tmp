@@ -1,0 +1,45 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+KNeighborsClassifier	ant.py	/^from sklearn.neighbors import KNeighborsClassifier$/;"	i
+LogisticRegression	ant.py	/^from sklearn.linear_model import LogisticRegression$/;"	i
+Y_hat	ant.py	/^Y_hat  = logisticRegr.predict(vars)$/;"	v
+Y_hat	ant.py	/^Y_hat = logisticRegr.predict(X_test)$/;"	v
+Y_hat_raw	ant.py	/^Y_hat_raw  = logisticRegr.predict(vars)$/;"	v
+add_intercept	ant.py	/^def add_intercept(x):$/;"	f
+clean_missing_ts	ant.py	/^def clean_missing_ts(one, two):$/;"	f
+confusion_matrix	ant.py	/^from sklearn.metrics import confusion_matrix$/;"	i
+data	t.py	/^data = []$/;"	v
+data	t.py	/^data = data[~data.index.duplicated(keep='first')]$/;"	v
+data	t.py	/^data = pd.merge(raw, normalized, left_index=True, right_index=True)$/;"	v
+data_train	ant.py	/^data_train = raw_data.loc[first_day:day_after]$/;"	v
+day_after	ant.py	/^day_after = first_day + pd.DateOffset(4)$/;"	v
+first_day	ant.py	/^first_day = normalized_data.index[0]$/;"	v
+knn	ant.py	/^knn = KNeighborsClassifier()$/;"	v
+line	ant.py	/^line  = logisticRegr.predict(vars)$/;"	v
+links_to_raw	t.py	/^links_to_raw = [$/;"	v
+logisticRegr	ant.py	/^logisticRegr = KNeighborsClassifier().fit(X_train, y_train)$/;"	v
+matplotlib	ant.py	/^import matplotlib.pyplot as plt$/;"	i
+normalized	t.py	/^normalized = normalized.sort_index()$/;"	v
+normalized_data	ant.py	/^normalized_data = normalized_data.sort_index()$/;"	v
+normalized_data	ant.py	/^normalized_data = pd.read_parquet('.\/hectare_data\/heatlive_allaitant_prod_ia\/normalized\/FR4973400352_2018-11-03.parquet')$/;"	v
+normalized_file	t.py	/^    normalized_file = pd.read_parquet(link.replace('ax_raw', 'normalized'))$/;"	v
+np	ant.py	/^import numpy as np$/;"	i
+np	t.py	/^import numpy as np$/;"	i
+pd	ant.py	/^import pandas as pd$/;"	i
+pd	t.py	/^import pandas as pd$/;"	i
+plt	ant.py	/^import matplotlib.pyplot as plt$/;"	i
+predict	ant.py	/^def predict(x, theta):$/;"	f
+print_dataframe_to_file	t.py	/^def print_dataframe_to_file(df, fileName="text.txt"):$/;"	f
+raw	t.py	/^raw = raw.sort_index()$/;"	v
+raw_data	ant.py	/^raw_data = pd.read_parquet('.\/hectare_data\/heatlive_allaitant_prod_ia\/ax_raw\/FR4973400352_2018-11-03.parquet')$/;"	v
+raw_data	ant.py	/^raw_data = raw_data.sort_index()$/;"	v
+raw_file	t.py	/^    raw_file = pd.read_parquet(link)$/;"	v
+train_test_split	ant.py	/^from sklearn.model_selection import train_test_split$/;"	i
+updata_train	ant.py	/^updata_train = normalized_data.loc[first_day:day_after]$/;"	v
+updata_train	ant.py	/^updata_train = np.array(updata_train.astype('int'))$/;"	v
+updata_train	ant.py	/^updata_train = updata_train['Up']$/;"	v
+vars	ant.py	/^vars = np.array(data_train[['EAn','EAg','Egx','ChAn','ChAg','Chgx','EtAg','Etgx','P0An']])$/;"	v

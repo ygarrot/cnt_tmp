@@ -1,0 +1,115 @@
+{
+  "main": {
+    "id": "c494b367def61e20",
+    "type": "split",
+    "children": [
+      {
+        "id": "a46e31b4346b5f06",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "grafana/Visualisation.md",
+            "mode": "preview"
+          }
+        },
+        "group": "f2f185381cd8122c"
+      },
+      {
+        "id": "2877855fe5b00b76",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "grafana/Visualisation.md",
+            "mode": "source"
+          }
+        },
+        "group": "f2f185381cd8122c"
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "9ca8a62832c7b39f",
+    "type": "split",
+    "children": [
+      {
+        "id": "bca1a57a250735a0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e2b387a353cd3a6e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "2cbd5b31781689b8",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "9159077c40966dec",
+    "type": "split",
+    "children": [
+      {
+        "id": "575c70c8a5e29a54",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f574269951aeb3ad",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "grafana/Visualisation.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "2877855fe5b00b76",
+  "lastOpenFiles": [
+    "grafana/Visualisation.md",
+    "grafana/query_dependencies.png",
+    "grafana/4.png",
+    "grafana/1.png",
+    "influxdb.md",
+    "Visualisation.md",
+    "gt.png",
+    "handbook.md",
+    "note.md",
+    "hectar/Untitled.md"
+  ]
+}

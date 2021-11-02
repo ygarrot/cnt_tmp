@@ -18,15 +18,12 @@ vêlage est imminent ou si l’animal présente un comportement de chaleurs
 organiser les données
 Tracer les saisons, resample, confusion matrix
 Correlation matrix
+
 Facebook kats prophet
 statsmodels
 
-## TODO mardi
+[X] Il faut au moins les données d'une vache sur une année
 
-test data un parquet vs un autre
-todo lundi
-
-Il faut au moins les données d'une vache sur une année
 TEST DE RACINE UNITAIRE (DICKEY-FULLER) ET DE STATIONARITÉ D'UNE SÉRIE CHRONOLOGIQUE
 
 outliers: valeurs aberrantes
@@ -172,7 +169,7 @@ aonao.corr()
 
 df.head
 
-## influxdb
+## influxdb // grafana
 
 ```bash
 brew install influxdb
@@ -206,3 +203,12 @@ fix: changer le plist du service et ajouter:
 <integer>66030</integer>
 </dict>
 ```
+
+/!\ une fois avoir upload les csv + parquet ne pas oublié de changer le timestamp
+
+def add(a, b):
+    return a + b
+def subtract(a, b):
+    return a - b
+a, b = 4, 5
+print((subtract if a > b else add)(a, b)) # 9
