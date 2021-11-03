@@ -6,6 +6,7 @@
       {
         "id": "a46e31b4346b5f06",
         "type": "leaf",
+        "dimension": 49.888392857142854,
         "state": {
           "type": "markdown",
           "state": {
@@ -13,11 +14,12 @@
             "mode": "preview"
           }
         },
-        "group": "f2f185381cd8122c"
+        "group": "312bb2f453530604"
       },
       {
-        "id": "2877855fe5b00b76",
+        "id": "ed0750e7ea7ee793",
         "type": "leaf",
+        "dimension": 50.11160714285714,
         "state": {
           "type": "markdown",
           "state": {
@@ -25,7 +27,7 @@
             "mode": "source"
           }
         },
-        "group": "f2f185381cd8122c"
+        "group": "312bb2f453530604"
       }
     ],
     "direction": "vertical"
@@ -99,17 +101,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "2877855fe5b00b76",
+  "active": "ed0750e7ea7ee793",
   "lastOpenFiles": [
     "grafana/Visualisation.md",
+    "grafana/annotation_query.png",
     "grafana/query_dependencies.png",
-    "grafana/4.png",
+    "grafana/query_variable_raw.png",
     "grafana/1.png",
-    "influxdb.md",
-    "Visualisation.md",
-    "gt.png",
-    "handbook.md",
-    "note.md",
-    "hectar/Untitled.md"
+    "grafana/2.png",
+    "grafana/3.png",
+    "grafana/4.png",
+    "grafana/repeat_by_variable.png",
+    "note.md"
   ]
 }

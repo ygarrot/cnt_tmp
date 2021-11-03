@@ -1,5 +1,7 @@
 # Installation
 
+---
+
 Installer Influxdb avec brew
 
 ```bash
@@ -13,22 +15,21 @@ brew services start influxdb
 ```
 
 ---
-Pour se connecter a la base données dans votre navigateur l'adresse par défaut est localhost:8086
-Lors de votre première connexion il faudra peut être se connecter en tant que `admin:admin`
+Pour se connecter a la base données dans votre navigateur l'adresse par défaut est [localhost:8086](http://localhost:8086/)
 
 ---
+
 ## Importer les données dans influxdb
 
-La documentation détaillé du client python se trouve sur:
-[github](https://github.com/influxdata/influxdb-client-python)
+La documentation détaillé du client python se trouve sur [github](https://github.com/influxdata/influxdb-client-python)
 
-Vous pouvez trouvez toute les informations nécessaire a la connexion a influxdb
-via python se trouve sur votre page d'administration influxdb ici:
+Vous pouvez trouvez toute les informations nécessaire a la connexion a influxdb via python en [local](http://localhost:8086/) ici:
 
 ![sdk](./sdk.png)
 ![getting started](./gt.png)
 
 ---
+
 1. Créer votre fichier d'initialisation
 
    Ce fichier servira lors de la connexion a influxdb,
@@ -76,7 +77,6 @@ via python se trouve sur votre page d'administration influxdb ici:
                                                             retry_interval=500,
                                                             max_retries=5,
                                                             exponential_base=2))
-    
     ```
 
 5. Envoyer vos données vers influxdb
@@ -87,10 +87,12 @@ via python se trouve sur votre page d'administration influxdb ici:
                      data_frame_measurement_name=data_frame_measurement_name)
     ```
 
-    Dans l'exemple ci dessus, le paramètre ***record*** sont les données que vous voulez envoyer,
-    cela peut être un array ou un dataframe pandas.
-    ***data_frame_tag_columns*** sert a indiquer quelles colonnes seront utilisées comme tags
-	---
+    Dans l'exemple ci dessus, le paramètre *record* sont les données que
+    vous voulez envoyer, cela peut être un array ou un dataframe pandas.
+    *data_frame_tag_columns* sert a indiquer quelles colonnes seront utilisées comme tags
+
+    ---
+
     ex: pour les événements de type heatilve_allaitant_ms:
 
     ``` python
@@ -102,6 +104,7 @@ via python se trouve sur votre page d'administration influxdb ici:
     Les tags servent pour les requetes souvent utilisées
     (ex: grouper par cow_id ou récuperer un event_id specifique)
 
+---
 Pour l'import des données j'ai procédé comme ceci:
 
 ``` txt
@@ -115,6 +118,7 @@ Création du client
 ```
 
 ## Ajouter les cow id et evend id
+
 Les cow id et les event id ne sont pas dans les parquets et sont très utiles en tant que tags pour les requetes.
 C'est pourquoi, j'ai appliqué cette fonction avant la concaténation des paquets:
 ```python
@@ -129,7 +133,8 @@ def add_event_id_to_df(parquet_file):
 
 ## Problème rencontré
 
-Pendant l'export des données j'ai rencontré un problème m'empechant d'interagir avec influxdb.
+Pendant l'export des données j'ai rencontré un problème m'empêchant d'interagir
+avec influxdb.
 Si vous rencontrez un problèmes avec influxdb,
 vous pouvez aller voir le fichier de log du service
 
@@ -153,7 +158,7 @@ Celle ci permet de récupérer le chemin des fichiers de log d'influxdb:
 cat $(brew services | grep influxdb | awk '{print $4}') | grep 'StandardErrorPath' -A 3
 ```
 
-```
+```bash
 <key>StandardErrorPath</key>
 <string>/Users/agritech/.brew/var/log/influxdb2/influxd_output.log</string>
 <key>StandardOutPath</key>
@@ -165,7 +170,8 @@ Dans mon fichier de log, j'avais cette erreur:
 
 La solution que j'ai trouvé est de rajouté ces lignes la:
 
-```plist
+```txt
+<key>SoftResourceLimits</key>
 <dict>
 	<key>NumberOfFiles</key>
 	<integer>10000</integer>
@@ -178,4 +184,4 @@ Dans votre fichier .plist:
 brew services | grep influxdb | awk '{print $4}'
 ```
 
-Vous pouvez la valeur de NumberOfFiles si 10000 n'est pas suffisant
+Vous pouvez changer la valeur de NumberOfFiles si 10000 n'est pas suffisant

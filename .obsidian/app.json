@@ -1,4 +1,5 @@
 {
   "vimMode": true,
-  "emacsyKeys": false
+  "emacsyKeys": false,
+  "alwaysUpdateLinks": true
 }
