@@ -1,0 +1,3 @@
+- [X] Stanford Coursera machine learning
+- [X] Youtube MIT Open Course Ware
+- [X] Stephane Mallat https://www.college-de-france.fr/site/stephane-mallat/course-2019-01-23-09h30.htm
