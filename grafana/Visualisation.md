@@ -1,4 +1,5 @@
-1. Afficher votre premier graph
+## 1. Afficher votre premier graph
+
   ![ChAg](./1.png)
 
 Si vous manquez d'inspiration ou si vous ne savez pas comment représenter de la donnée la page [play.grafana.org](https://play.grafana.org/) contient plein d'exemple. Vous pouvez inspecter les paramètres et les modifier pour faire des tests
@@ -6,7 +7,8 @@ Si vous manquez d'inspiration ou si vous ne savez pas comment représenter de la
  ![loc2](./3.png)
  ![loc3](./4.png)
 
-2. Variables
+## 2. Variables
+
     Pour éviter de devoir créer un graphe identique pour plusieurs élément d'une liste, Grafana propose des variables.
     Dans notre cas ca peut être utile pour chaque état de la vache ou pour chaque paramètre 'raw'.
     Ces variables permettent à l'utilisateur de customiser son dashboard.  
@@ -42,7 +44,8 @@ Si vous manquez d'inspiration ou si vous ne savez pas comment représenter de la
 
         Vous pouvez aussi utiliser une liste pour cloner une 'row'
 
-3. Annotation
+## 3. Annotation
+
     En cliquant sur un point de vos graphique vous pouvez rajoutez une annotation,
     ca peut servir a donner du contexte ou signaler un événement notable.  
 
@@ -57,7 +60,8 @@ Si vous manquez d'inspiration ou si vous ne savez pas comment représenter de la
         Ces annotations s'appliqueront sur tous les graphiques de votre dashboard
         ![example](./annotation_on_every_graph.png)
 
-4. Idées pour la suite
+## 4. Idées pour la suite
+ 
   ![window](./window.png)
   ![table](./table.png)
   ![normalized percent window](./normalized_percent_window.png)
